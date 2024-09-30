@@ -59,12 +59,14 @@ for i in range(side):
             row[-1]=1 # switch to living
     state.append(row)
 
+state, energyGain = gol.eat(side, state, predators, 0)
+predators[0]['stockPile'] += energyGain
+
 xcoord = predators[0]['x']
 ycoord = predators[0]['y']
 for k in range(3):
     for L in range(3):
         state[ycoord + k - 1][xcoord + L - 1] = 2
-
 
 #predators[{direction: v, negPos: -1, stockPile: 35, x: 0, y:0}]
 
@@ -102,7 +104,8 @@ for i in range(25):
     ax2.cla()
     ax2.plot(range(len(records)), records)
     
-    
+    # use if you need to see step-by-step eating
+    """
     state = gol.updatePred(side, state, predators)
     
     #Calculating number of living cells
@@ -117,6 +120,7 @@ for i in range(25):
     plt.pause(0.2) #pause for human vision
     ax2.cla()
     ax2.plot(range(len(records)), records)
+    """
 
 plt.ioff()
 plt.show()

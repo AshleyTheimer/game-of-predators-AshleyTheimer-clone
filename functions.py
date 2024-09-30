@@ -83,44 +83,52 @@ def updateGoLstate(side, currState, predators):
                 newState[i][j] = 0
        
     
-
+    newState = updatePred(side, newState, predators)
     del currState
     return newState
     
+def eat(side, newState, predators, cell):
+    xcoord = predators[cell]['x']
+    ycoord = predators[cell]['y']
+    energyGain = 0
+    for r in range(5):
+        for c in range(5):
+            try:
+                if (xcoord + c - 2) >= 0 and (ycoord + r - 2) >= 0:
+                    if (newState[ycoord + r - 2][xcoord + c - 2] == 1):
+                        newState[ycoord + r - 2][xcoord + c - 2] = 0
+                        energyGain += 1
+            except:
+                IndexError
+    return newState, energyGain
+    
+
+
 def updatePred(side, newState, predators):
     deadPreds = []
     for cell in range(len(predators)):
         
         print(cell, len(predators), predators[cell]['stockPile']) 
+        energyGain = 0
+        predators = updatePredListPos(side, predators, cell)
         xcoord = predators[cell]['x']
         ycoord = predators[cell]['y']
-        energyGain = 0
-        if (predators[cell]['stockPile'] > 0): # move pred if its alive
-            predators = updatePredListPos(side, predators, cell)
-            xcoord = predators[cell]['x']
-            ycoord = predators[cell]['y']
-            for r in range(5):
-                for c in range(5):
-                    try:
-                        if (xcoord + c - 2) >= 0 and (ycoord + r - 2) >= 0:
-                            if (newState[ycoord + r - 2][xcoord + c - 2] == 1):
-                                newState[ycoord + r - 2][xcoord + c - 2] = 0
-                                predators[cell]['stockPile'] += 1 # determine how much this is supposted to increase
-                                energyGain += 1
-                            if (((r > 0) & (r < 4)) & ((c > 0) & (c < 4))):
-                                newState[ycoord + r - 2][xcoord + c - 2] = 2
-                    except:
-                        IndexError
-        else: 
-            #print(predators[cell]['amassedEnergy'], predators[cell]['stockPile'])
-            deadPreds.append(cell)
-            for r in range(3):
-                for c in range(3):
-                    newState[ycoord + r - 1][xcoord + c - 1] = 1
-                    
-        print("Gain", energyGain, energyGain-5)
+        newstate, energyGain = eat(side, newState, predators, cell)
+        predators[cell]['stockPile'] += energyGain
         predators[cell]['stockPile'] += -5
-        
+        if (predators[cell]['stockPile'] <= 0):
+            AD = 1 # dead, replace with living cell
+            deadPreds.append(cell)
+            print("die", cell, predators[cell]['x'], predators[cell]['y'])
+        else:
+            AD = 2 # lives, keep predator on screen
+            #newstate, energyGain = eat(side, newState, predators, cell)
+            #predators[cell]['stockPile'] += energyGain
+        for r in range(3):
+            for c in range(3):
+                newState[ycoord + r - 1][xcoord + c - 1] = AD            
+        print("Gain", energyGain, energyGain-5)
+        #predators[cell]['stockPile'] += -5
         if (predators[cell]['stockPile'] >= 50):
             predators = reproduce(side, predators, cell)
     i = 0
