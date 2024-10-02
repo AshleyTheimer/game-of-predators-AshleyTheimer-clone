@@ -28,7 +28,7 @@ def reproduce(side, predators, predNum):
     dead = []
     predators[predNum]['stockPile'] += -15
     option = gen_repro_option()
-    # option = 4
+    #option = 2 #used to manually test the reproduction options
     print("option: ", option)
     xcoord = predators[predNum]['x']
     ycoord = predators[predNum]['y']
@@ -46,7 +46,7 @@ def reproduce(side, predators, predNum):
             'negPos': childNegPos,
             'stockPile': newStock,
             'x': xcoord,
-            'y':ycoord
+            'y': ycoord
         })
     else:
         i = 1
@@ -56,14 +56,16 @@ def reproduce(side, predators, predNum):
         while i <= option:
             if i == 3:
                 direct = perpendicular(predators, predNum)
-            childNegPos = -1 ** i
+            childNegPos = (-1) ** i
+            print(direct, childNegPos, "-1 ** ", i)
             predators.append({
                 'direction': direct,
                 'negPos': childNegPos,
                 'stockPile': newStock,
                 'x': xcoord,
-                'y':ycoord
+                'y': ycoord
             })
+            i += 1
         dead.append(predNum)
     return predators, dead
     
@@ -154,7 +156,7 @@ def updatePred(side, newState, predators):
     deadPreds = []
     for cell in range(len(predators)):
         
-        print(cell, len(predators), predators[cell]['stockPile']) 
+        #print(cell, len(predators), predators[cell]['stockPile']) 
         energyGain = 0
         predators = updatePredListPos(side, predators, cell) #move pos
         predators[cell]['stockPile'] += -5
@@ -165,7 +167,7 @@ def updatePred(side, newState, predators):
         if (predators[cell]['stockPile'] <= 0):
             AD = 1 # dead, replace with living cell
             deadPreds.append(cell)
-            print("die", cell, predators[cell]['x'], predators[cell]['y'])
+            #print("die", cell, predators[cell]['x'], predators[cell]['y'])
         else:
             AD = 2 # lives, keep predator on screen
             #newstate, energyGain = eat(side, newState, predators, cell)
@@ -176,12 +178,13 @@ def updatePred(side, newState, predators):
         for r in range(3):
             for c in range(3):
                 newState[ycoord + r - 1][xcoord + c - 1] = AD            
-        print("Gain", energyGain, energyGain-5)
+        #print("Gain", energyGain, energyGain-5)
         #predators[cell]['stockPile'] += -5
     i = 0
     deadPreds.sort(reverse=True)
     while i < len(deadPreds):
         index = deadPreds[i]
+        print("die: ", index)
         del predators[index]
         i += 1
     

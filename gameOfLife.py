@@ -52,7 +52,7 @@ for i in range(start): # iterates over the 5000 cells to get a random location n
 #predators = [{'direction': 'h', 'negPos': 1, 'stockPile': 20, 'x': 1, 'y':1}]
 
 # Validation 4
-predators = [{'direction': 'h', 'negPos': 1, 'stockPile': 100, 'x': 1, 'y':3}]
+predators = [{'direction': 'h', 'negPos': 1, 'stockPile': 100, 'x': 5, 'y':5}]
 print(predators[0]['direction'])
 
 
