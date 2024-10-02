@@ -1,25 +1,71 @@
 import copy
+import random
+
+def perpendicular(predators, predNum):
+    direct = 'h'
+    if (predators[predNum]['direction'] == 'h'):
+        direct = 'v'
+    return direct
+
+def gen_repro_option(): # got the idea of the fuction from shakespeare.py
+    prob_list = {
+        1: .35,
+        2: .20,
+        3: .15,
+        4: .30
+    }  # Initialize the prob. dist. dict.
+    maxLen = len(prob_list) - 1
+    while True:
+        randIndex = random.randint(0, maxLen)
+        randWord = random.choice(list(prob_list.keys())) # choose random key from dictonary 
+        randProb = random.random() # generate probablity 
+        if randProb < prob_list[randWord]: # rejection sampling 
+            return randWord
+
 
 def reproduce(side, predators, predNum):
     print("born")
+    dead = []
     predators[predNum]['stockPile'] += -15
-    newStock = (predators[predNum]['stockPile'])/2
-    predators[predNum]['stockPile'] = newStock
-    childNegPos = predators[predNum]['negPos']
-    childNegPos = childNegPos*-1
-    direct = 'h'
+    option = gen_repro_option()
+    # option = 4
+    print("option: ", option)
     xcoord = predators[predNum]['x']
     ycoord = predators[predNum]['y']
-    if (predators[predNum]['direction'] == 'h'):
-        direct = 'v'
-    predators.append({
-        'direction': direct,
-        'negPos': childNegPos,
-        'stockPile': newStock,
-        'x': xcoord,
-        'y':ycoord
-    })
-    return predators
+    newStock = (predators[predNum]['stockPile'])/2
+    childNegPos = predators[predNum]['negPos']
+    if((option == 1) or (option == 3)):
+        predators[predNum]['stockPile'] = newStock
+        childNegPos = predators[predNum]['negPos']
+        childNegPos = childNegPos*-1
+        direct = predators[predNum]['direction']
+        if (option == 1):
+            direct = perpendicular(predators, predNum)
+        predators.append({
+            'direction': direct,
+            'negPos': childNegPos,
+            'stockPile': newStock,
+            'x': xcoord,
+            'y':ycoord
+        })
+    else:
+        i = 1
+        direct = predators[predNum]['direction']
+        if option == 4:
+            newStock = newStock/2
+        while i <= option:
+            if i == 3:
+                direct = perpendicular(predators, predNum)
+            childNegPos = -1 ** i
+            predators.append({
+                'direction': direct,
+                'negPos': childNegPos,
+                'stockPile': newStock,
+                'x': xcoord,
+                'y':ycoord
+            })
+        dead.append(predNum)
+    return predators, dead
     
 
 
@@ -110,12 +156,12 @@ def updatePred(side, newState, predators):
         
         print(cell, len(predators), predators[cell]['stockPile']) 
         energyGain = 0
-        predators = updatePredListPos(side, predators, cell)
+        predators = updatePredListPos(side, predators, cell) #move pos
+        predators[cell]['stockPile'] += -5
         xcoord = predators[cell]['x']
         ycoord = predators[cell]['y']
         newstate, energyGain = eat(side, newState, predators, cell)
         predators[cell]['stockPile'] += energyGain
-        predators[cell]['stockPile'] += -5
         if (predators[cell]['stockPile'] <= 0):
             AD = 1 # dead, replace with living cell
             deadPreds.append(cell)
@@ -124,13 +170,14 @@ def updatePred(side, newState, predators):
             AD = 2 # lives, keep predator on screen
             #newstate, energyGain = eat(side, newState, predators, cell)
             #predators[cell]['stockPile'] += energyGain
+            if (predators[cell]['stockPile'] >= 50):
+                predators, dead = reproduce(side, predators, cell)
+                deadPreds += dead
         for r in range(3):
             for c in range(3):
                 newState[ycoord + r - 1][xcoord + c - 1] = AD            
         print("Gain", energyGain, energyGain-5)
         #predators[cell]['stockPile'] += -5
-        if (predators[cell]['stockPile'] >= 50):
-            predators = reproduce(side, predators, cell)
     i = 0
     deadPreds.sort(reverse=True)
     while i < len(deadPreds):

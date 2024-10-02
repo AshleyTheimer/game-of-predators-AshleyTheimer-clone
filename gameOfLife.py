@@ -43,10 +43,16 @@ for i in range(start): # iterates over the 5000 cells to get a random location n
 
 #predators[{direction: 'v', negPos: -1, stockPile: 35, x: 0, y:0}]
 # Validation 1
-predators = [{'direction': 'h', 'negPos': 1, 'stockPile': 10, 'x': 1, 'y':1}]
+#predators = [{'direction': 'h', 'negPos': 1, 'stockPile': 10, 'x': 1, 'y':1}]
 
 # Validation 2
 #predators = [{'direction': 'v', 'negPos': -1, 'stockPile': 10, 'x': 1, 'y':1}]
+
+# Validation 3
+#predators = [{'direction': 'h', 'negPos': 1, 'stockPile': 20, 'x': 1, 'y':1}]
+
+# Validation 4
+predators = [{'direction': 'h', 'negPos': 1, 'stockPile': 100, 'x': 1, 'y':3}]
 print(predators[0]['direction'])
 
 
@@ -58,16 +64,13 @@ for i in range(side):
         if i*side + j in births: # i is 100s place 
             row[-1]=1 # switch to living
     state.append(row)
-
-state, energyGain = gol.eat(side, state, predators, 0)
-predators[0]['stockPile'] += energyGain
-
+"""
 xcoord = predators[0]['x']
 ycoord = predators[0]['y']
 for k in range(3):
     for L in range(3):
         state[ycoord + k - 1][xcoord + L - 1] = 2
-
+"""
 #predators[{direction: v, negPos: -1, stockPile: 35, x: 0, y:0}]
 
 
