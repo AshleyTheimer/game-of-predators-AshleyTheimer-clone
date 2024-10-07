@@ -1,6 +1,17 @@
 import copy
 import random
 
+def genDataRows(questionNum, state, predators, maxPreds, stock):
+    if (questionNum == 1):
+        row = [str(maxPreds), str(stock)]
+    else:
+        if (questionNum == 2):
+            headers = ["predLifeLen", "foodEnergy"]
+        else: #questionNum = 3
+            headers = ["maxPreds", "stock"]
+    return row
+
+
 def perpendicular(predators, predNum):
     direct = 'h'
     if (predators[predNum]['direction'] == 'h'):
@@ -24,12 +35,11 @@ def gen_repro_option(): # got the idea of the fuction from shakespeare.py
 
 
 def reproduce(side, predators, predNum):
-    print("born")
     dead = []
     predators[predNum]['stockPile'] += -15
     option = gen_repro_option()
     #option = 2 #used to manually test the reproduction options
-    print("option: ", option)
+    print("born option: ", option)
     xcoord = predators[predNum]['x']
     ycoord = predators[predNum]['y']
     newStock = (predators[predNum]['stockPile'])/2
@@ -46,7 +56,8 @@ def reproduce(side, predators, predNum):
             'negPos': childNegPos,
             'stockPile': newStock,
             'x': xcoord,
-            'y': ycoord
+            'y': ycoord,
+            'stepsLived':0
         })
     else:
         i = 1
@@ -57,13 +68,14 @@ def reproduce(side, predators, predNum):
             if i == 3:
                 direct = perpendicular(predators, predNum)
             childNegPos = (-1) ** i
-            print(direct, childNegPos, "-1 ** ", i)
+            #print(direct, childNegPos, "-1 ** ", i)
             predators.append({
                 'direction': direct,
                 'negPos': childNegPos,
                 'stockPile': newStock,
                 'x': xcoord,
-                'y': ycoord
+                'y': ycoord,
+                'stepsLived':0
             })
             i += 1
         dead.append(predNum)
@@ -73,6 +85,7 @@ def reproduce(side, predators, predNum):
 
 def updatePredListPos(side, predators, cell):
     #predators[{direction: v, negPos: -1, stockPile: 35, x: 0, y:0}]
+    predators[cell]['stepsLived'] += 1
     np = predators[cell]['negPos']
     if (predators[cell]['direction'] == 'v'):
         ycoord = predators[cell]['y']
@@ -83,7 +96,7 @@ def updatePredListPos(side, predators, cell):
         xcoord = predators[cell]['x']
         if(((xcoord >= side-2)&(np == 1)) or ((xcoord == 1)&(np == -1))):
             predators[cell]['negPos'] = predators[cell]['negPos'] * -1
-            print("bounce", cell, xcoord) 
+            #print("bounce", cell, xcoord) 
         predators[cell]['x'] += predators[cell]['negPos']
     return predators
 
@@ -91,7 +104,7 @@ def updatePredListPos(side, predators, cell):
 
 
 #Takes argument of 2d array of boolean integers
-def updateGoLstate(side, currState, predators):
+def updateGoLstate(side, currState, predators, repoStock):
     newState = copy.deepcopy(currState)
     
     #Calculate neighboring cells for each cell
@@ -131,7 +144,7 @@ def updateGoLstate(side, currState, predators):
                 newState[i][j] = 0
        
     
-    newState = updatePred(side, newState, predators)
+    newState = updatePred(side, newState, predators, repoStock)
     del currState
     return newState
     
@@ -152,7 +165,7 @@ def eat(side, newState, predators, cell):
     
 
 
-def updatePred(side, newState, predators):
+def updatePred(side, newState, predators, repoStock):
     deadPreds = []
     for cell in range(len(predators)):
         
@@ -172,7 +185,7 @@ def updatePred(side, newState, predators):
             AD = 2 # lives, keep predator on screen
             #newstate, energyGain = eat(side, newState, predators, cell)
             #predators[cell]['stockPile'] += energyGain
-            if (predators[cell]['stockPile'] >= 50):
+            if (predators[cell]['stockPile'] >= repoStock):
                 predators, dead = reproduce(side, predators, cell)
                 deadPreds += dead
         for r in range(3):
@@ -184,7 +197,7 @@ def updatePred(side, newState, predators):
     deadPreds.sort(reverse=True)
     while i < len(deadPreds):
         index = deadPreds[i]
-        print("die: ", index)
+        #print("cell num die: ", index, "steps lived: ", predators[index]['stepsLived'])
         del predators[index]
         i += 1
     
