@@ -36,6 +36,7 @@ def gen_repro_option(): # got the idea of the fuction from shakespeare.py
 
 def reproduce(side, predators, predNum):
     dead = []
+    AD = 2
     predators[predNum]['stockPile'] += -15
     option = gen_repro_option()
     #option = 2 #used to manually test the reproduction options
@@ -78,8 +79,9 @@ def reproduce(side, predators, predNum):
                 'stepsLived':0
             })
             i += 1
+        AD = 1
         dead.append(predNum)
-    return predators, dead
+    return predators, dead, AD
     
 
 
@@ -186,7 +188,7 @@ def updatePred(side, newState, predators, repoStock):
             #newstate, energyGain = eat(side, newState, predators, cell)
             #predators[cell]['stockPile'] += energyGain
             if (predators[cell]['stockPile'] >= repoStock):
-                predators, dead = reproduce(side, predators, cell)
+                predators, dead, AD = reproduce(side, predators, cell)
                 deadPreds += dead
         for r in range(3):
             for c in range(3):

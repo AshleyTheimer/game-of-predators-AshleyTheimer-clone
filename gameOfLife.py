@@ -12,7 +12,7 @@ import random
 import matplotlib.pyplot as plt
 import functions as gol
 
-seeVisuals = 0 # 0 for off 1 for on
+seeVisuals = 1 # 0 for off 1 for on
 
 
 # Pick the question you want to collect data about
@@ -22,7 +22,7 @@ seeVisuals = 0 # 0 for off 1 for on
 #      with 5 neighbors), does this increase or decrease the maximum number of predators which can be sustained in the system?
 
 questionNum = 1 #user change number here
-
+"""
 if (questionNum == 1):
     file_name = "GOLQ1.csv"
     headers = ["maxPreds", "stock"]
@@ -36,9 +36,9 @@ else:
 dataFile = open(file_name, 'w')
 line = ','.join(str(item) for item in headers)
 dataFile.write(line + '\n')
+"""
 
-
-trials = 10
+trials = 1
 
 for k in range(trials):
     j = 0
@@ -51,9 +51,9 @@ for k in range(trials):
 
 
     if (questionNum == 1):
-        numIter = 20
-        repoStock = 0
-        repoStockChange = 5
+        numIter = 1
+        repoStock = 10
+        repoStockChange = 10
     else:
         if (questionNum == 2):
             numIter = 15
@@ -110,8 +110,8 @@ for k in range(trials):
         # Validation 4
         #predators = [{'direction': 'h', 'negPos': 1, 'stockPile': 100, 'x': 1, 'y':1, 'stepsLived':0}]
 
-        randX = random.randint(0, 99)
-        randY = random.randint(0, 99)
+        randX = random.randint(1, 98)
+        randY = random.randint(1, 98)
         randDir = random.randint(1, 4)
         direct = "h"
         negPosDir = -1
@@ -164,11 +164,15 @@ for k in range(trials):
             state = gol.updateGoLstate(side, state, predators, repoStock)
             
             #calculate maxPreds
-            numPreds = len(predators)
-            if (numPreds > maxPreds):
-                maxPreds = numPreds
+            numPreds = [pred for pred in predators if pred["stepsLived"] >= 3]
+            numPredsNum = len(numPreds)
+            print("numPreds", numPredsNum)
+            if (numPredsNum > maxPreds):
+                maxPreds = numPredsNum
+                print("change", maxPreds)
             #print("num predators:               ", len(predators))
             if (len(predators) == 0):
+                print("everyone died")
                 break
             
             
@@ -207,10 +211,10 @@ for k in range(trials):
         if (seeVisuals == 1):
             plt.ioff()
             plt.show()
-        rows = gol.genDataRows(questionNum, state, predators, maxPreds, repoStock)
+"""        rows = gol.genDataRows(questionNum, state, predators, maxPreds, repoStock)
         line = ','.join(str(item) for item in rows)
         dataFile.write(line + '\n')
-
+"""
 if (seeVisuals == 1):
     plt.ioff()
     plt.show()
