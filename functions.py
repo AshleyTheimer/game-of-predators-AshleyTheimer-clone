@@ -1,14 +1,16 @@
 import copy
 import random
 
-def genDataRows(questionNum, state, predators, maxPreds, stock):
+def genDataRows(questionNum, state, predators, maxPreds, stock, stockGain, lengthLivesList):
     if (questionNum == 1):
         row = [str(maxPreds), str(stock)]
     else:
         if (questionNum == 2):
-            headers = ["predLifeLen", "foodEnergy"]
+            print(lengthLivesList, "len", len(lengthLivesList), "sum", sum(lengthLivesList)) 
+            avg = sum(lengthLivesList)/ len(lengthLivesList)
+            row = [str(stockGain), str(avg)]
         else: #questionNum = 3
-            headers = ["maxPreds", "stock"]
+            headers = ["maxPreds", "stepsLived"]
     return row
 
 
@@ -60,6 +62,7 @@ def reproduce(side, predators, predNum):
             'y': ycoord,
             'stepsLived':0
         })
+        print("born")
     else:
         i = 1
         direct = predators[predNum]['direction']
@@ -78,6 +81,7 @@ def reproduce(side, predators, predNum):
                 'y': ycoord,
                 'stepsLived':0
             })
+            print("born")
             i += 1
         AD = 1
         dead.append(predNum)
@@ -106,7 +110,7 @@ def updatePredListPos(side, predators, cell):
 
 
 #Takes argument of 2d array of boolean integers
-def updateGoLstate(side, currState, predators, repoStock):
+def updateGoLstate(side, currState, predators, repoStock, stockGain):
     newState = copy.deepcopy(currState)
     
     #Calculate neighboring cells for each cell
@@ -146,11 +150,11 @@ def updateGoLstate(side, currState, predators, repoStock):
                 newState[i][j] = 0
        
     
-    newState = updatePred(side, newState, predators, repoStock)
+    newState, lengthLife = updatePred(side, newState, predators, repoStock, stockGain)
     del currState
-    return newState
+    return newState, lengthLife
     
-def eat(side, newState, predators, cell):
+def eat(side, newState, predators, cell, stockGain):
     xcoord = predators[cell]['x']
     ycoord = predators[cell]['y']
     energyGain = 0
@@ -167,7 +171,7 @@ def eat(side, newState, predators, cell):
     
 
 
-def updatePred(side, newState, predators, repoStock):
+def updatePred(side, newState, predators, repoStock, stockGain):
     deadPreds = []
     for cell in range(len(predators)):
         
@@ -177,7 +181,7 @@ def updatePred(side, newState, predators, repoStock):
         predators[cell]['stockPile'] += -5
         xcoord = predators[cell]['x']
         ycoord = predators[cell]['y']
-        newstate, energyGain = eat(side, newState, predators, cell)
+        newstate, energyGain = eat(side, newState, predators, cell, stockGain)
         predators[cell]['stockPile'] += energyGain
         if (predators[cell]['stockPile'] <= 0):
             AD = 1 # dead, replace with living cell
@@ -197,10 +201,12 @@ def updatePred(side, newState, predators, repoStock):
         #predators[cell]['stockPile'] += -5
     i = 0
     deadPreds.sort(reverse=True)
+    lengthLife = []
     while i < len(deadPreds):
         index = deadPreds[i]
+        lengthLife.append(predators[index]['stepsLived'])
         #print("cell num die: ", index, "steps lived: ", predators[index]['stepsLived'])
         del predators[index]
         i += 1
     
-    return newState
+    return newState, lengthLife

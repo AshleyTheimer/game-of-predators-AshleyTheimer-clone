@@ -12,7 +12,7 @@ import random
 import matplotlib.pyplot as plt
 import functions as gol
 
-seeVisuals = 1 # 0 for off 1 for on
+seeVisuals = 0 # 0 for off 1 for on
 
 
 # Pick the question you want to collect data about
@@ -21,8 +21,8 @@ seeVisuals = 1 # 0 for off 1 for on
 #   3. If the base rules of the Game of Life are changed, such that the cells have evolved to survive under conditions with 4 surrounding neighbors (but perish 
 #      with 5 neighbors), does this increase or decrease the maximum number of predators which can be sustained in the system?
 
-questionNum = 1 #user change number here
-"""
+questionNum = 2 #user change number here
+
 if (questionNum == 1):
     file_name = "GOLQ1.csv"
     headers = ["maxPreds", "stock"]
@@ -36,9 +36,9 @@ else:
 dataFile = open(file_name, 'w')
 line = ','.join(str(item) for item in headers)
 dataFile.write(line + '\n')
-"""
 
-trials = 1
+
+trials = 5
 
 for k in range(trials):
     j = 0
@@ -48,15 +48,20 @@ for k in range(trials):
 
     # Question data collecting variables
     repoStock = 50
+    stockGained = 1
+    eatGain = 0
+    
 
 
     if (questionNum == 1):
-        numIter = 1
+        numIter = 10
         repoStock = 10
         repoStockChange = 10
     else:
         if (questionNum == 2):
-            numIter = 15
+            numIter = 8
+            stockGained = 0
+            eatGain = 0.5
         else: #questionNum = 3
             numIter = 15
 
@@ -65,6 +70,7 @@ for k in range(trials):
         i = 0
         maxPreds = 0
         print("Trial: ", k, "Iteration: ", j)
+        stockGained += eatGain
         repoStock += repoStockChange
         
         #Empty array for the overall system state
@@ -157,22 +163,24 @@ for k in range(trials):
             plt.show()
             plt.pause(2)
             ax2.plot(range(len(records)), records)
+            
+        lengthLivesList = []
 
         #Run the simulation for 250 steps, or until all dead
         for i in range(250):
             #Update the state based on Conway's rules
-            state = gol.updateGoLstate(side, state, predators, repoStock)
+            state, lengthLife = gol.updateGoLstate(side, state, predators, repoStock, stockGained)
+            lengthLivesList.extend(lengthLife)
+                
             
             #calculate maxPreds
             numPreds = [pred for pred in predators if pred["stepsLived"] >= 3]
             numPredsNum = len(numPreds)
-            print("numPreds", numPredsNum)
             if (numPredsNum > maxPreds):
                 maxPreds = numPredsNum
-                print("change", maxPreds)
             #print("num predators:               ", len(predators))
             if (len(predators) == 0):
-                print("everyone died")
+                print("everyone died", i)
                 break
             
             
@@ -211,10 +219,14 @@ for k in range(trials):
         if (seeVisuals == 1):
             plt.ioff()
             plt.show()
-"""        rows = gol.genDataRows(questionNum, state, predators, maxPreds, repoStock)
+        
+        for pred in range(len(predators)):
+            lengthLivesList.append(predators[pred]['stepsLived'])
+        
+        rows = gol.genDataRows(questionNum, state, predators, maxPreds, repoStock, stockGained, lengthLivesList)
         line = ','.join(str(item) for item in rows)
         dataFile.write(line + '\n')
-"""
+
 if (seeVisuals == 1):
     plt.ioff()
     plt.show()
