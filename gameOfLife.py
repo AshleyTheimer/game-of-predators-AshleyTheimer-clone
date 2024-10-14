@@ -38,7 +38,7 @@ line = ','.join(str(item) for item in headers)
 dataFile.write(line + '\n')
 
 
-trials = 5
+trials = 10
 
 for k in range(trials):
     j = 0
@@ -47,7 +47,7 @@ for k in range(trials):
 
 
     # Question data collecting variables
-    repoStock = 50
+    repoStock = 10
     stockGained = 1
     eatGain = 0
     
