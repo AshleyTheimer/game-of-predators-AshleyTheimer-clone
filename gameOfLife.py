@@ -10,7 +10,7 @@
 
 import random
 import matplotlib.pyplot as plt
-import functions as gol
+import functionsQ2 as gol
 
 seeVisuals = 0 # 0 for off 1 for on
 
@@ -26,13 +26,16 @@ questionNum = 2 #user change number here
 if (questionNum == 1):
     file_name = "GOLQ1.csv"
     headers = ["maxPreds", "stock"]
+    import functions as gol
 else:
     if (questionNum == 2):
-        file_name = "GOLQ2.csv"
-        headers = ["predLifeLen", "foodEnergy"]
+        file_name = "GOLQ2WeightedRepo.csv"
+        headers = ["foodEnergy", "predLifeLen"]
+        import functionsQ2 as gol
     else: #questionNum = 3
         file_name = "GOLQ3.csv"
         headers = ["maxPreds", "stock"]
+        import functionsQ3 as gol
 dataFile = open(file_name, 'w')
 line = ','.join(str(item) for item in headers)
 dataFile.write(line + '\n')
@@ -47,23 +50,20 @@ for k in range(trials):
 
 
     # Question data collecting variables
-    repoStock = 10
+    repoStock = 15
     stockGained = 1
     eatGain = 0
     
 
 
-    if (questionNum == 1):
+    if (questionNum == 1) or (questionNum == 3):
         numIter = 10
         repoStock = 10
         repoStockChange = 10
     else:
-        if (questionNum == 2):
-            numIter = 8
-            stockGained = 0
-            eatGain = 0.5
-        else: #questionNum = 3
-            numIter = 15
+        numIter = 8
+        stockGained = 0
+        eatGain = 0.5
 
     # get data for different variables
     for j in range(numIter):
@@ -170,7 +170,11 @@ for k in range(trials):
         for i in range(250):
             #Update the state based on Conway's rules
             state, lengthLife = gol.updateGoLstate(side, state, predators, repoStock, stockGained)
-            lengthLivesList.extend(lengthLife)
+            if (questionNum == 2):
+                for h in range(len(lengthLife)):
+                    rows = gol.genDataRows(questionNum, state, predators, maxPreds, repoStock, stockGained, lengthLife[h])
+                    line = ','.join(str(item) for item in rows)
+                    dataFile.write(line + '\n')
                 
             
             #calculate maxPreds
@@ -223,9 +227,10 @@ for k in range(trials):
         for pred in range(len(predators)):
             lengthLivesList.append(predators[pred]['stepsLived'])
         
-        rows = gol.genDataRows(questionNum, state, predators, maxPreds, repoStock, stockGained, lengthLivesList)
-        line = ','.join(str(item) for item in rows)
-        dataFile.write(line + '\n')
+        if (questionNum != 2):
+            rows = gol.genDataRows(questionNum, state, predators, maxPreds, repoStock, stockGained, lengthLivesList)
+            line = ','.join(str(item) for item in rows)
+            dataFile.write(line + '\n')
 
 if (seeVisuals == 1):
     plt.ioff()

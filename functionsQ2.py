@@ -1,16 +1,13 @@
 import copy
 import random
 
-def genDataRows(questionNum, state, predators, maxPreds, stock, stockGain, lengthLife):
-    if (questionNum == 1):
-        row = [str(maxPreds), str(stock)]
-    else:
-        if (questionNum == 2): 
-            row = [str(stockGain), str(lengthLife)]
-        else: #questionNum = 3
-            headers = ["maxPreds", "stepsLived"]
-    return row
 
+def genDataRows(questionNum, state, predators, maxPreds, stock, stockGain, lengthLife):
+    if (questionNum == 2): 
+        row = [str(stockGain), str(lengthLife)]
+    else: #questionNum = 3
+        headers = ["maxPreds", "stepsLived"]
+    return row
 
 def perpendicular(predators, predNum):
     direct = 'h'
@@ -34,10 +31,10 @@ def gen_repro_option(): # got the idea of the fuction from shakespeare.py
             return randWord
 
 
-def reproduce(side, predators, predNum):
+def reproduce(side, predators, predNum, stockGain, repoStock):
     dead = []
     AD = 2
-    predators[predNum]['stockPile'] += -15
+    predators[predNum]['stockPile'] += -1 * repoStock * stockGain
     option = gen_repro_option()
     #option = 2 #used to manually test the reproduction options
     print("born option: ", option)
@@ -189,8 +186,8 @@ def updatePred(side, newState, predators, repoStock, stockGain):
             AD = 2 # lives, keep predator on screen
             #newstate, energyGain = eat(side, newState, predators, cell)
             #predators[cell]['stockPile'] += energyGain
-            if (predators[cell]['stockPile'] >= repoStock):
-                predators, dead, AD = reproduce(side, predators, cell)
+            if (predators[cell]['stockPile'] >= (repoStock * stockGain)):
+                predators, dead, AD = reproduce(side, predators, cell, stockGain, repoStock)
                 deadPreds += dead
         for r in range(3):
             for c in range(3):
