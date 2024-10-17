@@ -13,8 +13,8 @@ def unique(list1):
             unique_list.append(x)
 
 
-file_path = 'GOLQ1.csv'
-file_path = 'GOLQ1Try.csv'
+#file_path = 'GOLQ1.csv'
+#file_path = 'GOLQ1Try.csv'
 file_path = 'GOLQ1Accum.csv'
 with open(file_path, 'r', encoding='utf-8') as file:
     lineData = file.readlines()
@@ -40,8 +40,8 @@ for line in lines:
     split = row.split(",")
     for num in range(len(split)):
         split[num] = int(split[num])
-        key = int(split[1])
-        dataDict[key][0].append(split[0])
+    key = int(split[1])
+    dataDict[key][0].append(split[0])
     
 for key in dataDict:
     values = dataDict[key][0] 
@@ -63,11 +63,10 @@ std_err = [dataDict[key][3] for key in keys]
 fig, ax = plt.subplots()
 
 ax.bar(keys, avgs, width= 4)
-ax.errorbar(keys, avgs, yerr=std_dev, fmt=".", color="y")
+#ax.errorbar(keys, avgs, yerr=std_dev, fmt=".", color="y")
 ax.errorbar(keys, avgs, yerr=std_err, fmt=".", color="r")
 
 ax.set_ylabel('Average Number of Predators')
-ax.set_title('Stock to Reproduce')
+ax.set_xlabel('Stock to Reproduce')
+ax.set_title('Max Number of Predators for Different Reproduction Stocks')
 plt.show()
-
-print(uniqueStocks)
