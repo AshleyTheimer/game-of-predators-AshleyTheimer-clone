@@ -1,2 +1,20 @@
-![GOLQ1Graph](https://github.com/user-attachments/assets/bc8a79a5-d626-4211-8bd1-d5b5abd2d3f4)
-![GOLQ2Bar](https://github.com/user-attachments/assets/cb6ccc63-31cc-478a-8946-6f77469a56b4)
+Answering the Sim Questions
+---
+1. How does the maximum number of predators suported by a system depend on how much stockpile is needed to reproduce in the predator lifecycle?  <br>
+&nbsp; &nbsp; &nbsp; &nbsp; To Answer this question, no real assumptions were made within the code. I ran the simulation 10 times, each time increasing the reproduction stock variable by 10 each time, starting from 20-110. After I ran that sim 10 times, I continued to run that loop of simulations another 43 times to get a wide range of data. From there, I graphed the repoduction stock versus the average max number of predators.
+![GOLQ1Graph](https://github.com/user-attachments/assets/bc8a79a5-d626-4211-8bd1-d5b5abd2d3f4)<br>
+&nbsp; &nbsp; &nbsp; &nbsp; The data here ended up behaving exactly how I expected. As you can see, the sim allowed for less predators with the lower reproduction stock number starting with 1.5 predators at reproduction stock 20. The number of predators the system sustained kept drastically increasing until it reached a peak number of predators at the reproduction stock of 60, with a maximum average predator count around 3.5. After that, the number of predators the system allowed decreased through reproduction stock of 110 with a minimum average predator count around 3.0. The red error bars on each bar of the graph are the standard errors of the mean. All of the error bars are relatively small spanning less than 1 unit on the y axis, with 50 and 60 reproduction stock having the largest error bars and 20, 30, and 110 having the smaller error bars, meaning that the reproduction stocks with the lower number of predators has a more accurate mean/average than the stocks with higher means/averages. <br>
+&nbsp; &nbsp; &nbsp; &nbsp; This graph makes sense, because with a lower amount of reproduction stock, the parent cell would reproduce more quickly and have the chance to die quicker. With the reproduction stock also being low when reproducing, the baby cells also have a higher chance of living a short amount of time because they start with a lower stock and may use it up before they get the chance to fuel it up. It also makes sense that there would be a lower amount of predators in the system with the higher reproduction stock because it would take longer and would be harder for those predators to gain enough energy to reproduce, especially with a step limit placed on the simulation. <br>
+&nbsp; &nbsp; &nbsp; &nbsp; In the end, the reproduction stock of 60 allowed for the most amount of predators in the simulation. The maximum number of predators suported by a system depends on the reproduction stock, time limits, and the percentage of the parent cells stock that is split when it does reproduce.
+---
+2. How does the length of a predator's life depend on the efficiency of its energy consumption (e.g., how many units of 'food' it gains per cell it 'eats')?  <br>
+&nbsp; &nbsp; &nbsp; &nbsp; Blah
+![GOLQ2Bar](https://github.com/user-attachments/assets/cb6ccc63-31cc-478a-8946-6f77469a56b4)<br>
+&nbsp; &nbsp; &nbsp; &nbsp; Blah
+---
+3. If the base rules of the Game of Life are changed, such that the cells have evolved to survive under conditions with 4 surrounding neighbors (but perish with 5 neighbors), does this increase or decrease the maximum number of predators which can be sustained in the system?  <br>
+&nbsp; &nbsp; &nbsp; &nbsp; Blah
+ ![GOLQ3Graph](https://github.com/user-attachments/assets/959310db-de2b-462f-b5da-41c5651b078c)<br>
+&nbsp; &nbsp; &nbsp; &nbsp; Blah
+
+
