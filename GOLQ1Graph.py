@@ -64,9 +64,10 @@ fig, ax = plt.subplots()
 
 ax.bar(keys, avgs, width= 4)
 #ax.errorbar(keys, avgs, yerr=std_dev, fmt=".", color="y")
-ax.errorbar(keys, avgs, yerr=std_err, fmt=".", color="r")
+ax.errorbar(keys, avgs, yerr=std_err, fmt=".", color="r", label='Standard Error')
 
 ax.set_ylabel('Average Number of Predators')
 ax.set_xlabel('Stock to Reproduce')
 ax.set_title('Max Number of Predators for Different Reproduction Stocks')
+plt.legend(loc = 'upper right')
 plt.show()

@@ -67,9 +67,10 @@ fig, ax = plt.subplots()
 
 ax.bar(keys, avgs, width= 0.4)
 #ax.errorbar(keys, avgs, yerr=std_dev, fmt=".", color="y")
-ax.errorbar(keys, avgs, yerr=std_err, fmt=".", color="r")
+ax.errorbar(keys, avgs, yerr=std_err, fmt=".", color="r", label='Standard Error')
 
 ax.set_ylabel('Average Predator Life')
 ax.set_xlabel('Stock Gained From Eating')
 ax.set_title('Averge Predator Lifespan per Stock Gained from Eating')
+plt.legend(loc = 'upper right')
 plt.show()
