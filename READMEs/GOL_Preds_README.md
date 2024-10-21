@@ -1,8 +1,8 @@
 gameOfLife.py and gameOfLifeQ3_1.py are Python files that simulates a game of life with predators that eat living cells for 250 steps and collects data based on the users input.
 ## Key Feature
-- code builds a random initial state of a 100x100 grid that has half of the initial cells living, and the other hald dead
+- Code builds a random initial state of a 100x100 grid that has half of the initial cells living, and the other hald dead
+- There are predators that have been added to the original game of life that can eat living cells to gain energy, reproduce, and die. These predators have a big impact on the game of life state changes.
 ## Getting Started
-These instructions will help Windows users properly install and run the program:
 - Imports
   - functions.py or functionsQ2.py for gameOfLife.py
   - functionsQ3_1.py for gameOfLifeQ3_1.py
