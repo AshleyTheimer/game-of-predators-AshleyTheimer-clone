@@ -10,10 +10,10 @@ gameOfLife.py and gameOfLifeQ3_1.py are Python files that simulates a game of li
   - user must define which question they are trying to solve on line 24. They must choose either 1 or 2 (gameOfLifeQ3_1.py answers question 3 without the user having to change this number)
   - User can change how many trials they will perform to collect data on line 44 of gameOfLife.py or line 30 on gameOfLifeQ3_1.py
 ## How the program works:
-- both programs set up the initial game of life states and spawns in a predator. The files use 3 loops.
-  1) Innermost: updates the current simulation of the game of life
-  2) Middle: Runs the simulation through different variable numbers
-  3) Outer: Runs those simulations a bunch of times to get multiple trials
+- both programs set up the initial game of life states and spawns in a predator. The files use 3 loops. <br>
+&nbsp; 1. Innermost: updates the current simulation of the game of life <br>
+&nbsp; 2. Middle: Runs the simulation through different variable numbers <br>
+&nbsp; 3. Outer: Runs those simulations a bunch of times to get multiple trials <br>
 - The function files takes care of updating the simulations state, including which cells are living, dead or predators. It also takes care of reproducing predators and the death of predators
 - Data will be collected in a csv file:
     - 'GOLQ1.csv' for question 1. copy the data into 'GOLQ1Accum.csv' to graph later with GOLQ1Graph.py
